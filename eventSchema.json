@@ -1,0 +1,53 @@
+{
+	"Event": {
+		"name": "String",
+		"title": "String",
+		"description": "String",
+		"image": "String?",
+		"hintText": "String?",
+		"passThrough": "bool",
+		"challenge": {
+			"property": "String",
+			"difficulty": "int",
+			"autoPass": "[Check]?",
+			"autoFail": "[Check]?"
+		},
+		"options": [
+			{
+				"title": "String",
+				"description": "String",
+				"hintText": "String",
+				"buttonText": "Go",
+				"restrictions": "[Check]",
+				"children": [
+					{
+						"chance": "float",
+						"event": "String"
+					}, "..."
+				]
+			}, "..."
+		],
+		"changes": [
+			{
+				"property": "String",
+				"setTo": "int?",
+				"adjustBy": "int?",
+				"hidden": "bool"
+			}, "..."
+		],
+		"canGoBack": "bool",
+		"noOptionNextEvent": "String"
+	},
+
+	"Check": {
+		"property": "String",
+		"comparedToProperty": "String?",
+		"atMost": "int?",
+		"atLeast": "int?",
+		"equalTo": "int?",
+		"noMoreThan": "int?",
+		"noLessThan": "int?",
+		"challengeSuccess": "bool?",
+		"hidden": "bool"
+	}
+}

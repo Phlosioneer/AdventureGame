@@ -1,0 +1,23 @@
+[
+    {
+        "name": "brimhaven.hub",
+        "title": "Brimhaven",
+        "description": "A small, safe hamlet in a big, dangerous world.",
+        "options": [
+            {
+                "title": "Go north, into the Deep Forest.",
+                "description": "test description",
+                "children": [
+                    {
+                        "event": "deepforest.enter"
+                    }
+                ]
+            },
+            {
+                "title": "Visit the Prancing Pony",
+                "description": "The finest tavern in town! The only tavern in town...",
+                "children": [{"event": "brimhaven.tavern"}]
+            }
+        ]
+    }
+]

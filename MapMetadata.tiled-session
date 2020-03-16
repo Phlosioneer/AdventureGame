@@ -1,0 +1,22 @@
+{
+    "activeFile": "assets/MapMetadata.tmx",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "assets/MapMetadata.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 336.3333333333333,
+                "y": 315.66666666666663
+            }
+        }
+    },
+    "openFiles": [
+        "assets/MapMetadata.tmx"
+    ],
+    "project": "MapMetadata.tiled-project",
+    "recentFiles": [
+        "assets/MapMetadata.tmx"
+    ]
+}

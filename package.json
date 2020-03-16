@@ -1,0 +1,19 @@
+{
+  "name": "adventuregame",
+  "version": "1.0.0",
+  "description": "Text based adventure inspired by Fallen London and Sunless Sea",
+  "main": "main.js",
+  "scripts": {
+    "css-build": "node-sass --omit-source-map-url sass/bulma.scss static/bulma.css",
+    "start": "npm run css-build && node main.js"
+  },
+  "author": "Phlosioneer",
+  "dependencies": {
+    "mustache": "^4.0.0",
+    "node-static": "^0.7.11"
+  },
+  "devDependencies": {
+    "bulma": "^0.8.0",
+    "node-sass": "^4.13.1"
+  }
+}

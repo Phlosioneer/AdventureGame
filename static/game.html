@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/bulma.css"/>
+    <script src="/static/mustache.js" defer="defer"></script>
+    <script src="/static/game.js" defer="defer"></script>
+    <link rel="stylesheet" href="/static/notBulma.css"/>
+</head>
+<body>
+    <div class="tabs is-boxed">
+        <ul>
+            <li id="tab-story" class="is-active"><a onclick="setTab('story')">Story</a></li>
+            <li id="tab-inventory"><a onclick="setTab('inventory')">Inventory</a></li>
+            <li id="tab-equipment"><a onclick="setTab('equipment')">Equipment</a></li>
+            <li id="tab-map" disabled><a onclick="setTab('map')">Map</a></li>
+        </ul>
+    </div>
+    <div class="container" id="tab-content">Loading...</div>
+</body>
