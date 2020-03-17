@@ -4,6 +4,31 @@ var loadingText = "<p>Loading...</p>";
 var cachingEnabled = false;
 
 var knownEvents = {};
+// Returns the parsed event as a promise.
+function fetchEvent(eventName) {
+    if (cachingEnabled && knownEvents[eventName]) {
+        return Promise.resolve(knownEvents[eventName]);
+    }
+
+    return fetch("/events/" + encodeURIComponent(eventName) + ".json")
+        .then(response => response.json())
+        .then(responseBody => {
+        responseBody.forEach(event => {
+            knownEvents[event.name] = event;
+            if (event.options) {
+                event.options.forEach(option => {
+                    if (!option.buttonText) {
+                        option.buttonText = "Go";
+                    }
+                });
+            }
+        });
+
+        // TODO: prefetch child events
+        return knownEvents[eventName];
+    });
+}
+
 class Story {
     render() {
         if (this.template === undefined || this.event === undefined) {
@@ -19,41 +44,22 @@ class Story {
         return Mustache.render(this.template, this.event);
     }
 
-    // Returns the parsed event as a promise.
-    fetchEvent(eventName) {
-        if (cachingEnabled && knownEvents[eventName]) {
-            return Promise.resolve(knownEvents[eventName]);
-        }
-
-        return fetch("/events/" + encodeURIComponent(eventName) + ".json")
-            .then(response => response.json())
-            .then(responseBody => {
-            responseBody.forEach(function (event) {
-                knownEvents[event.name] = event;
-                if (event.options) {
-                    event.options.forEach(function (option) {
-                        if (!option.buttonText) {
-                            option.buttonText = "Go";
-                        }
-                    });
-                }
-            });
-
-            // TODO: prefetch child events
-            return knownEvents[eventName];
-        });
-    }
-
     constructor(cookie) {
         // TODO: Load data from cookies
         this.eventName = "brimhaven.hub";
         this.event = undefined;
         this.template = undefined;
-        this.eventPromise = this.fetchEvent(this.eventName)
+        this.eventPromise = fetchEvent(this.eventName)
             .then(event => this.event = event);
-        this.templatePromise = fetch("/static/story.mustache")
+        this.templatePromise = fetch("/static/deck.mustache")
             .then(response => response.text())
             .then(template => this.template = template);
+    }
+
+    setEvent(eventName) {
+        this.event = undefined;
+        this.eventName = eventName;
+        this.eventPromise = fetchEvent(eventName).then(event => this.event = event);
     }
 }
 
@@ -86,75 +92,55 @@ class Map {
     constructor(cookie) {
         // TODO: Load data from cookies
         this.position = {x: 225, y: 464};
-        this.template = undefined;
-        this.canvas = undefined;
-        this.templatePromise = fetch("/static/map.mustache")
-            .then(response => response.text())
-            .then(text => this.template = text);
+        this.canvas = document.getElementById("mapCanvas");
+        this.canvas.width = this.canvas.offsetWidth;
+        this.canvas.height = this.canvas.offsetHeight;
+        this.overworldDeck = document.getElementById("mapCards");
+        this.overworldDeck.hidden = true;
         this.mapImage = new Image();
         this.mapImage.src = "/static/Map.png";
+        this.template = undefined;
+        this.templatePromise = fetch("/static/overworldDeck.mustache")
+            .then(response => response.text())
+            .then(template => this.template = template);
+        this.overworldData = undefined;
+        this.overworldDataPromise = fetch("/static/mapMetadata.json")
+            .then(response => response.json())
+            .then(data => this.overworldData = data);
 
         this.chartedCourse = undefined;
         this.quillMoved = false;
         this.shouldMove = false;
 
-        var instance = this;
-        this.mouseDraggedCallback = () => instance.mouseDragged();
-    }
+        this.mapImage.onload = () => this.renderCanvas();
+        this.mouseDraggedCallback = () => this.mouseDragged();
+        this.canvas.onmousedown = () => this.mousePressed();
+        this.canvas.onmouseup = () => this.mouseReleased();
+        this.pauseRendering = true;
+        this.nearestHub = undefined;
 
-    render() {
-        if (this.template === undefined) {
-            this.templatePromise.then(() => setTab("map", true));
-            return loadingText;
-        }
-
-        // This fires when a <canvas> is added to the tabContent element.
-        var observer = new MutationObserver((mutationList, observer) => {
-            for (var i = 0; i < mutationList.length; i++) {
-                var mutation = mutationList[i];
-                if (mutation.addedNodes.length == 0) {
-                    continue;
-                }
-                
-                for (var j = 0; j < mutation.addedNodes.length; j++) {
-                    var node = mutation.addedNodes[j];
-                    if (node.nodeType == 1 && node.tagName == "CANVAS") {
-                        // We've loaded the canvas.
-                        observer.disconnect();
-                        this.canvas = node;
-                        this.canvas.width = this.canvas.offsetWidth;
-                        this.canvas.height = this.canvas.offsetHeight;
-                        var instance = this;
-                        this.canvas.onmousedown = () => instance.mousePressed();
-                        this.canvas.onmouseup = () => instance.mouseReleased();
-                        this.renderCanvas();
-                    }
-                }
-            }
-        });
-        observer.observe(tabContentElement, {childList: true});
-        return this.template;
+        window.onload = () => {
+            this.canvas.width = this.canvas.offsetWidth;
+            this.canvas.height = this.canvas.offsetHeight;
+            this.pauseRendering = false;
+        };
+        window.onresize = () => {
+            this.canvas.width = this.canvas.offsetWidth;
+            this.canvas.height = this.canvas.offsetHeight;
+        };
     }
 
     renderCanvas() {
         if (!this.mapImage.complete || this.mapImage.naturalWidth === 0) {
             // Wait for the map image to load.
-            var instance = this;
-            this.mapImage.onload = () => instance.renderCanvas;
-            return;
-        }
-        if (!this.canvas) {
-            // Wait for the canvas to load.
-            return;
-        }
-        if (currentTab != "map") {
-            // The map isn't focused, so stop the loop.
+            this.mapImage.onload = () => this.renderCanvas();
             return;
         }
         // Shoot for 30fps. Note that we don't use setInterval.
-        var instance = this;
-        window.setTimeout(() => instance.renderCanvas(), 1/30 * 1000);
-
+        window.setTimeout(() => this.renderCanvas(), 1/30 * 1000);
+        if (this.pauseRendering) {
+            return;
+        }
         this.update();
 
         var context = this.canvas.getContext("2d");
@@ -257,11 +243,46 @@ class Map {
     }
 
     update() {
-        if (!this.chartedCourse || !this.shouldMove) {
-            return;
+        if (this.chartedCourse && this.shouldMove) {
+            var SPEED = 1;
+            this._move(SPEED);
         }
-        var SPEED = 1;
-        this._move(SPEED);
+        
+        if (this.overworldData) {
+            var newNearestHub = undefined;
+            var newNearestSqDist = -1;
+            this.overworldData.cities.forEach(city => {
+                if (!city.hubEvent) {
+                    return;
+                }
+                var sqDist = this._sqDistance(this.position, city);
+                if ((!newNearestHub || sqDist < newNearestSqDist) && sqDist <= city.radius * city.radius) {
+                    newNearestHub = city;
+                    newNearestSqDist = sqDist;
+                }
+            });
+            if (!newNearestHub) {
+                this.nearestHub = undefined;
+                this.overworldDeck.innerHTML = "";
+            } else if (!this.nearestHub || this.nearestHub.name !== newNearestHub.name) {
+                this.nearestHub = newNearestHub;
+                Promise.all([this.templatePromise, fetchEvent(newNearestHub.hubEvent)]).then((promisedValues) => {
+                    var cards = [{
+                        title: promisedValues[1].title,
+                        description: promisedValues[1].description,
+                        onclick: "map.openEvent('" + promisedValues[1].name + "');",
+                    }];
+                    this.overworldDeck.innerHTML = Mustache.render(this.template, {cards: cards});
+                });
+            }
+        }
+    }
+
+    // Called by overworldDeck cards.
+    openEvent(eventName) {
+        toggleJournal(true);
+        tabs["story"].instance.setEvent(eventName);
+        setTab("story");
     }
 
     _move(distance) {
@@ -299,14 +320,28 @@ var tabs = {
     "equipment": {
         "element": document.getElementById("tab-equipment"),
         "instance": new Equipment(document.cookie)
-    },
-    "map": {
-        "element": document.getElementById("tab-map"),
-        "instance": new Map(document.cookie)
     }
 };
+var map = new Map(document.cookie);
 var currentTab = "story";
 var tabContentElement = document.getElementById("tab-content");
+var journalElement = document.getElementById("journal");
+
+var journalActive = true;
+
+function toggleJournal(newState) {
+    if (newState === journalActive) {
+        return;
+    }
+    journalActive = newState;
+    if (journalActive) {
+        map.overworldDeck.hidden = true;
+        journalElement.classList.add("is-active");
+    } else {
+        map.overworldDeck.hidden = false;
+        journalElement.classList.remove("is-active");
+    }
+}
 
 function setTab(name, override) {
     if (currentTab == name && !override) {
@@ -328,4 +363,4 @@ function renderTab(tab) {
 }
 
 // First load
-setTab("map", true);
+setTab("story", true);

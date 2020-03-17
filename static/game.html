@@ -7,13 +7,19 @@
     <link rel="stylesheet" href="/static/notBulma.css"/>
 </head>
 <body>
-    <div class="tabs is-boxed">
-        <ul>
-            <li id="tab-story" class="is-active"><a onclick="setTab('story')">Story</a></li>
-            <li id="tab-inventory"><a onclick="setTab('inventory')">Inventory</a></li>
-            <li id="tab-equipment"><a onclick="setTab('equipment')">Equipment</a></li>
-            <li id="tab-map" disabled><a onclick="setTab('map')">Map</a></li>
-        </ul>
+    <canvas src="/static/Map.png" id="mapCanvas" class="map"></canvas>
+    <div class="map-cards" id="mapCards"></div>
+    <div class="modal is-active" id="journal">
+        <div class="modal-content journal rounded">
+            <div class="tabs is-boxed">
+                <ul>
+                    <li id="tab-story" class="is-active"><a onclick="setTab('story')">Story</a></li>
+                    <li id="tab-inventory"><a onclick="setTab('inventory')">Inventory</a></li>
+                    <li id="tab-equipment"><a onclick="setTab('equipment')">Equipment</a></li>
+                    <li style="position: absolute; right: 0;"><button class="button" onclick="toggleJournal(false);">X</button></li>
+                </ul>
+            </div>
+            <div class="container tab-content" id="tab-content">Loading...</div>
+        </div>
     </div>
-    <div class="container" id="tab-content">Loading...</div>
 </body>

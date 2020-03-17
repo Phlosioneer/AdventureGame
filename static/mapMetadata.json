@@ -4,115 +4,134 @@
 			"name": "",
 			"x": 150.25,
 			"y": 135.75,
-			"radius": 15
+			"radius": 15,
+			"hubEvent": null
 		},
 		{
 			"name": "",
 			"x": 235.5,
 			"y": 34.75,
-			"radius": 15
+			"radius": 15,
+			"hubEvent": null
 		},
 		{
 			"name": "",
 			"x": 334.5,
 			"y": 77.75,
-			"radius": 15
+			"radius": 15,
+			"hubEvent": null
 		},
 		{
 			"name": "",
 			"x": 487.5,
 			"y": 23.75,
-			"radius": 15
+			"radius": 15,
+			"hubEvent": null
 		},
 		{
 			"name": "Dragon's Keep",
 			"x": 735.5,
 			"y": 105.75,
-			"radius": 15
+			"radius": 15,
+			"hubEvent": null
 		},
 		{
 			"name": "Brimstone Bazaar",
 			"x": 702,
 			"y": 188.25,
-			"radius": 15
+			"radius": 15,
+			"hubEvent": null
 		},
 		{
 			"name": "Dragonstone Mine",
 			"x": 733.5,
 			"y": 264.75,
-			"radius": 15
+			"radius": 15,
+			"hubEvent": null
 		},
 		{
 			"name": "",
 			"x": 604,
 			"y": 156.25,
-			"radius": 15
+			"radius": 15,
+			"hubEvent": null
 		},
 		{
 			"name": "",
 			"x": 542.5,
 			"y": 299.25,
-			"radius": 15
+			"radius": 15,
+			"hubEvent": null
 		},
 		{
 			"name": "Homestead Hill",
 			"x": 290,
 			"y": 209.25,
-			"radius": 15
+			"radius": 15,
+			"hubEvent": null
 		},
 		{
 			"name": "Silent Quarry",
 			"x": 352.5,
 			"y": 412.25,
-			"radius": 15
+			"radius": 15,
+			"hubEvent": null
 		},
 		{
 			"name": "Brimhaven",
 			"x": 225.5,
 			"y": 464.25,
-			"radius": 15
+			"radius": 15,
+			"hubEvent": "brimhaven.hub"
 		},
 		{
 			"name": "Monastery",
 			"x": 305.5,
 			"y": 597.25,
-			"radius": 15
+			"radius": 15,
+			"hubEvent": null
 		},
 		{
 			"name": "Crooked Crossing",
 			"x": 459.5,
 			"y": 563.75,
-			"radius": 15
+			"radius": 15,
+			"hubEvent": null
 		},
 		{
 			"name": "",
 			"x": 676.5,
 			"y": 545.25,
-			"radius": 15
+			"radius": 15,
+			"hubEvent": null
 		},
 		{
 			"name": "",
 			"x": 621.5,
 			"y": 458.75,
-			"radius": 15
+			"radius": 15,
+			"hubEvent": null
 		},
 		{
 			"name": "",
 			"x": 721,
 			"y": 431.25,
-			"radius": 15
+			"radius": 15,
+			"hubEvent": null
 		},
 		{
 			"name": "Forgotten Ruins",
 			"x": 748,
 			"y": 693.25,
-			"radius": 15
+			"radius": 15,
+			"hubEvent": null
 		},
 		{
 			"name": "Slaver's Camp",
 			"x": 436.5,
 			"y": 735.25,
-			"radius": 15
+			"radius": 15,
+			"hubEvent": null
 		}
 	],
 	"regions": [

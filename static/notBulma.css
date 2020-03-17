@@ -5,3 +5,24 @@
     height: 100%;
     z-index: -1;
 }
+
+.rounded {
+    border-radius: 10px;
+}
+
+.journal {
+    width: 70%;
+    height: 80%;
+    background-color: wheat;
+}
+
+.tab-content {
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.map-cards {
+    position:absolute;
+    bottom:0;
+    right:2%;
+}
