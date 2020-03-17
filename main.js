@@ -50,33 +50,6 @@ function makeIndexedEndpoint(router, name, index) {
 }
 makeIndexedEndpoint(expressApp, "events", eventLocations);
 makeIndexedEndpoint(expressApp, "qualities", qualityLocations);
-/*
-expressApp.get("/events/:eventName.json", function(request, response, next) {
-    var eventName = request.params["eventName"];
-    var fileName = eventLocations[eventName];
-    if (fileName) {
-        response.redirect(fileName);
-    } else {
-        console.error("Could not find any event named: '" + eventName + "'");
-        console.error("Known events:");
-        console.error(eventLocations);
-        response.statusCode = 404;
-        response.end();
-    }
-});
-expressApp.get("/qualities/:qualityName.json", function(request, response, next) {
-    var qualityName = request.params["qualityName"];
-    var fileName = qualityLocations[qualityName];
-    if (fileName) {
-        response.redirect(fileName);
-    } else {
-        console.error("Could not find any quality named: '" + qualityName + "'");
-        console.error("Known qualities:");
-        console.error(qualityLocations);
-        response.statusCode = 404;
-        response.end();
-    }
-})//*/
 
 expressApp.use(function(error, request, response, next) {
     console.error("Encountered error:");
