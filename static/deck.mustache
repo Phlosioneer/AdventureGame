@@ -1,3 +1,19 @@
+{{!
+Expects input "Event"
+
+Event: {
+    "title": "string",
+    "description": "string",
+    "options": [Card]
+}
+Card: {
+    "title": "string",
+    "description": "string",
+    "buttonText": "string"
+}
+
+See qualityList.mustache for the definition of the Quality type.
+}}
 <header>{{title}}</header>
 <p>{{description}}</p>
 <br/>

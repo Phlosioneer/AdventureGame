@@ -1,3 +1,14 @@
+{{!
+Expects input "Event"
+
+Event: {
+    "options": [Card]
+}
+Card: {
+    "title": "string",
+    "description": "string",
+}
+}}
 {{#cards}}
     <div class="card rounded" onclick="{{onclick}}">
         <header class="card-header">
