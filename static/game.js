@@ -30,36 +30,27 @@ function fetchEvent(eventName) {
 }
 
 class Story {
-    render() {
-        if (this.template === undefined || this.event === undefined) {
-            if (this.templatePromise === undefined) {
-                console.log("template promise missing");
-            }
-            if (this.eventPromise === undefined) {
-                console.log("event promise missing");
-            }
-            Promise.all([this.templatePromise, this.eventPromise]).then(() => setTab("story", true));
-            return loadingText;
+    async render() {
+        tabContentElement.innerHTML = loadingText;
+        var template = await this.templatePromise;
+        var event =  await this.eventPromise;
+        // Ensure that this is still the current tab before overwriting.
+        if (currentTab == "story") {
+            tabContentElement.innerHTML = Mustache.render(template, event);
         }
-        return Mustache.render(this.template, this.event);
     }
 
     constructor(cookie) {
         // TODO: Load data from cookies
         this.eventName = "brimhaven.hub";
-        this.event = undefined;
-        this.template = undefined;
-        this.eventPromise = fetchEvent(this.eventName)
-            .then(event => this.event = event);
+        this.eventPromise = fetchEvent(this.eventName);
         this.templatePromise = fetch("/static/deck.mustache")
-            .then(response => response.text())
-            .then(template => this.template = template);
+            .then(response => response.text());
     }
 
     setEvent(eventName) {
-        this.event = undefined;
         this.eventName = eventName;
-        this.eventPromise = fetchEvent(eventName).then(event => this.event = event);
+        this.eventPromise = fetchEvent(eventName);
     }
 }
 
@@ -350,7 +341,7 @@ function setTab(name, override) {
     tabs[currentTab].element.classList.remove("is-active");
     tabs[name].element.classList.add("is-active"); 
     currentTab = name;
-    tabContentElement.innerHTML = renderTab(currentTab);
+    renderTab(currentTab);
     if (name == "map") {
         tabContentElement.classList.remove("container");
     } else if (!tabContentElement.classList.contains("container")) {
@@ -359,7 +350,7 @@ function setTab(name, override) {
 }
 
 function renderTab(tab) {
-    return tabs[tab].instance.render();
+    tabs[tab].instance.render();
 }
 
 // First load
