@@ -1,0 +1,38 @@
+[
+    {
+        "name": "basic.money",
+        "displayName": "Ducats",
+        "icon": "/static/images/icons/coins.png",
+        "description": "The currency of most places"
+    },
+    {
+        "name": "basic.luck",
+        "displayName": "Luck",
+        "icon": "/static/images/icons/luck.png",
+        "description": "An appeal to fortune"
+    },
+    {
+        "name": "basic.attack",
+        "displayName": "Attack",
+        "icon": "/static/images/icons/attack.png",
+        "description": "Your ability to deal damage"
+    },
+    {
+        "name": "basic.constitution",
+        "displayName": "Constitution",
+        "icon": "/static/images/icons/constitution.png",
+        "description": "Your ability to withstand damage and pain"
+    },
+    {
+        "name": "basic.willpower",
+        "displayName": "Willpower",
+        "icon": "/static/images/icons/willpower.png",
+        "description": "Your determination and mental fortitude"
+    },
+    {
+        "name": "basic.perception",
+        "displayName": "Perception",
+        "icon": "/static/images/icons/perception.png",
+        "description": "Your awareness of your surroundings"
+    }
+]
