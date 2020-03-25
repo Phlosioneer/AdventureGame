@@ -1,39 +1,11 @@
 
 var loadingText = "<p>Loading...</p>";
 
-var cachingEnabled = false;
-
-var knownEvents = {};
-// Returns the parsed event as a promise.
-function fetchEvent(eventName) {
-    if (cachingEnabled && knownEvents[eventName]) {
-        return Promise.resolve(knownEvents[eventName]);
-    }
-
-    return fetch("/events/" + encodeURIComponent(eventName) + ".json")
-        .then(response => response.json())
-        .then(responseBody => {
-        responseBody.forEach(event => {
-            knownEvents[event.name] = event;
-            if (event.options) {
-                event.options.forEach(option => {
-                    if (!option.buttonText) {
-                        option.buttonText = "Go";
-                    }
-                });
-            }
-        });
-
-        // TODO: prefetch child events
-        return knownEvents[eventName];
-    });
-}
-
 class Story {
     async render() {
         tabContentElement.innerHTML = loadingText;
-        var template = await this.templatePromise;
-        var event =  await this.eventPromise;
+        var template = await fetchManager.getTemplate("deck");
+        var event =  await fetchManager.getEvent(this.eventName);
         // Ensure that this is still the current tab before overwriting.
         if (currentTab == "story") {
             tabContentElement.innerHTML = Mustache.render(template, event);
@@ -43,14 +15,13 @@ class Story {
     constructor(cookie) {
         // TODO: Load data from cookies
         this.eventName = "brimhaven.hub";
-        this.eventPromise = fetchEvent(this.eventName);
-        this.templatePromise = fetch("/static/deck.mustache")
-            .then(response => response.text());
+        fetchManager.getEvent(this.eventName);
+        fetchManager.getTemplate("deck");
     }
 
     setEvent(eventName) {
         this.eventName = eventName;
-        this.eventPromise = fetchEvent(eventName);
+        fetchManager.getEvent(eventName);
     }
 }
 
@@ -90,10 +61,7 @@ class Map {
         this.overworldDeck.hidden = true;
         this.mapImage = new Image();
         this.mapImage.src = "/static/Map.png";
-        this.template = undefined;
-        this.templatePromise = fetch("/static/overworldDeck.mustache")
-            .then(response => response.text())
-            .then(template => this.template = template);
+        fetchManager.getTemplate("overworldDeck");
         this.overworldData = undefined;
         this.overworldDataPromise = fetch("/static/mapMetadata.json")
             .then(response => response.json())
@@ -109,6 +77,8 @@ class Map {
         this.canvas.onmouseup = () => this.mouseReleased();
         this.pauseRendering = true;
         this.nearestHub = undefined;
+
+        this.currentRenderPromise = undefined;
 
         window.onload = () => {
             this.canvas.width = this.canvas.offsetWidth;
@@ -257,14 +227,19 @@ class Map {
                 this.overworldDeck.innerHTML = "";
             } else if (!this.nearestHub || this.nearestHub.name !== newNearestHub.name) {
                 this.nearestHub = newNearestHub;
-                Promise.all([this.templatePromise, fetchEvent(newNearestHub.hubEvent)]).then((promisedValues) => {
+                (async () => {
+                    var event = await fetchManager.getEvent(newNearestHub.hubEvent);
+                    var template = await fetchManager.getTemplate("overworldDeck");
                     var cards = [{
-                        title: promisedValues[1].title,
-                        description: promisedValues[1].description,
-                        onclick: "map.openEvent('" + promisedValues[1].name + "');",
+                        title: event.title,
+                        description: event.description,
+                        onclick: "map.openEvent('" + event.name + "');",
                     }];
-                    this.overworldDeck.innerHTML = Mustache.render(this.template, {cards: cards});
-                });
+                    // Ensure that this rendering is still useful before overwriting.
+                    if (this.nearestHub && this.nearestHub.hubEvent.name === event.name) {
+                        this.overworldDeck.innerHTML = Mustache.render(template, {cards: cards});
+                    }
+                })();
             }
         }
     }
