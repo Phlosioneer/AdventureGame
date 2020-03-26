@@ -35,7 +35,7 @@ class Inventory {
     }
 
     render() {
-        return loadingText;
+        tabContentElement.innerHTML = loadingText;
     }
 }
 
@@ -46,7 +46,7 @@ class Equipment {
     }
 
     render() {
-        return loadingText;
+        tabContentElement.innerHTML =  loadingText;
     }
 }
 
