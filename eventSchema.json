@@ -6,6 +6,8 @@
 		"image": "String?",
 		"hintText": "String?",
 		"passThrough": "bool",
+		"canGoBack": "bool",
+		"noOptionNextEvent": "String",
 		"challenge": {
 			"property": "String",
 			"difficulty": "int",
@@ -18,7 +20,7 @@
 				"description": "String",
 				"hintText": "String",
 				"buttonText": "Go",
-				"restrictions": "[Check]",
+				"requirements": "[Check]",
 				"children": [
 					{
 						"chance": "float",
@@ -27,16 +29,15 @@
 				]
 			}, "..."
 		],
-		"changes": [
-			{
-				"property": "String",
-				"setTo": "int?",
-				"adjustBy": "int?",
-				"hidden": "bool"
-			}, "..."
-		],
-		"canGoBack": "bool",
-		"noOptionNextEvent": "String"
+		"changes": "[Change]",
+		"exotic": "[ExoticEffect]"
+	},
+
+	"Change": {
+		"property": "String",
+		"setTo": "int?",
+		"adjustBy": "int?",
+		"hidden": "bool"
 	},
 
 	"Check": {
@@ -49,5 +50,14 @@
 		"noLessThan": "int?",
 		"challengeSuccess": "bool?",
 		"hidden": "bool"
-	}
+	},
+
+	"ExoticEffect": [
+		{
+			"type": "moveTo",
+			"x": "int?",
+			"y": "int?",
+			"hub": "String?"
+		}
+	]
 }
