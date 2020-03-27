@@ -23,6 +23,19 @@
 
 .map-cards {
     position:absolute;
-    bottom:0;
-    right:2%;
+    bottom: 0;
+    right: 2%;
+}
+
+.column.last {
+    flex-grow: 0;
+}
+
+.column.fit {
+    max-width: fit-content;
+}
+
+.quality-image {
+    width: 40px;
+    height: 40px;
 }

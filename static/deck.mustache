@@ -9,10 +9,12 @@ Event: {
 Card: {
     "title": "string",
     "description": "string",
-    "buttonText": "string"
+    "buttonText": "string",
+    "hasRequirements": "bool",
+    "requirements": [Requirement]
 }
 
-See qualityList.mustache for the definition of the Quality type.
+See requirement.mustache for the definition of the Quality type.
 }}
 <header>{{title}}</header>
 <p>{{description}}</p>
@@ -25,14 +27,28 @@ See qualityList.mustache for the definition of the Quality type.
             </p>
         </header>
         <div class="card-content">
-            <div class="columns">
-                <div class="column is-flex">
-                    {{description}}
+            {{#hasRequirements}}
+                {{description}}
+                <div class="columns">
+                    <div class="column is-flex"></div>
+                    {{#requirements}}
+                        {{>requirement}}
+                    {{/requirements}}
+                    <div class="column last">
+                        <button class="button">{{buttonText}}</button>
+                    </div>
                 </div>
-                <div class="column" style="flex-grow: 0;">
-                    <button class="button">{{buttonText}}</button>
+            {{/hasRequirements}}
+            {{^hasRequirements}}
+                <div class="columns">
+                    <div class="column is-flex">
+                        {{description}}
+                    </div>
+                    <div class="column last">
+                        <button class="button">{{buttonText}}</button>
+                    </div>
                 </div>
-            </div>
+            {{/hasRequirements}}
         </div>
     </div>
     <br/>

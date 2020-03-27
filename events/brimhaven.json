@@ -7,6 +7,10 @@
             {
                 "title": "Go north, into the Deep Forest.",
                 "description": "test description",
+                "requirements": [{
+                    "property": "basic.constitution",
+                    "atLeast": 5
+                }],
                 "children": [
                     {
                         "event": "deepforest.enter"

@@ -71,8 +71,7 @@ class FetchManager {
             this.events,
             this.eventPromises,
             "/events/",
-            "json",
-            event => this._processEvent(event));
+            "json");
     }
 
     getTemplate(templateName) {
@@ -82,58 +81,6 @@ class FetchManager {
             this.templatePromises,
             "/static/",
             "mustache");
-    }
-
-    _processEvent(event) {
-        // Set default button text.
-        if (event.options) {
-            event.options.forEach(option => {
-                if (!option.buttonText) {
-                    option.buttonText = "Go";
-                }
-            });
-        }
-    
-        // Merge the description lines, if it's an array.
-        if (event.description instanceof Array) {
-            var merged = "";
-            event.description.forEach(line => merged += line);
-            event.description = merged;
-        }
-        
-        // Replace ASCII newlines with HTML ones.
-        event.description = event.description.replace("\n", "<br/>");
-    
-        // Prefetch and render qualities.
-        if (event.options) {
-            /*var requiredQualityPromises = [];
-            requiredQualityPromises.push(this.getTemplate("qualityList"));
-            event.options.forEach(option => {
-                if (option.requirements) {
-                    option.requirements.forEach(requirement => {
-                        var promise = this.getQuality(requirement.property);
-                        requiredQualityPromises.push(promise);
-                        if (requirement.comparedToProperty) {
-                            var promise = this.getQuality(requirement.comparedToProperty);
-                            requiredQualityPromises.push(promise);
-                        }
-                    });
-                }
-            });
-
-            if (requiredQualityPromises.length == 1) {
-                event.renderedQualities = "";
-                event.renderedQualitiesPromise = Promise.resolve("");
-            } else {
-                event.renderedQualities = undefined;
-                event.renderedQualitiesPromise = Promise.all(requiredQualityPromises)
-                    .then(promisedValues => {
-                        var template = promisedValues[0];
-                        var qualities = promisedValues.splice(1);
-                        event.renderedQualities = Mustache.render(template, {qualities: qualities});
-                    });
-            }*/
-        }
     }
 }
 

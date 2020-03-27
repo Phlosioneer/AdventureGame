@@ -6,10 +6,64 @@ class Story {
         tabContentElement.innerHTML = loadingText;
         var template = await fetchManager.getTemplate("deck");
         var event =  await fetchManager.getEvent(this.eventName);
+        var partials = {
+            requirement: await fetchManager.getTemplate("requirement")
+        };
+
+        // The rendering data is similar, but not identical, to the event data.
+        var options = await Promise.all(event.options.map(this.renderOption.bind(this)));
+        var renderData = {
+            title: event.title,
+            description: this.renderText(event.description),
+            options: options
+        };
         // Ensure that this is still the current tab before overwriting.
         if (currentTab == "story") {
-            tabContentElement.innerHTML = Mustache.render(template, event);
+            tabContentElement.innerHTML = Mustache.render(template, renderData, partials);
         }
+    }
+
+    async renderOption(option) {
+        if (!option.requirements) {
+            option.requirements = [];
+        }
+        var requirements = await Promise.all(option.requirements.map(this.renderRequirement.bind(this)));
+        requirements = requirements.filter(element => element !== undefined);
+        var buttonText = option.buttonText;
+        if (!buttonText) {
+            buttonText = "Go";
+        }
+
+        return {
+            title: option.title,
+            description: this.renderText(option.description),
+            hasRequirements: option.requirements.length != 0,
+            requirements: requirements,
+            buttonText: buttonText
+        };
+    }
+
+    async renderRequirement(requirement) {
+        if (requirement.hidden) {
+            return undefined;
+        }
+        var quality = await fetchManager.getQuality(requirement.property);
+        return {
+            name: quality.name,
+            icon: quality.icon
+        };
+    }
+
+    renderText(text) {
+        // Merge the description lines, if it's an array.
+        if (text instanceof Array) {
+            var merged = "";
+            text.forEach(line => merged += line);
+            text = merged;
+        }
+
+        // Replace ASCII newlines with HTML ones.
+        return text.replace("\n", "<br/>");
     }
 
     constructor(cookie) {
@@ -17,6 +71,7 @@ class Story {
         this.eventName = "brimhaven.hub";
         fetchManager.getEvent(this.eventName);
         fetchManager.getTemplate("deck");
+        fetchManager.getTemplate("requirement");
     }
 
     setEvent(eventName) {
@@ -94,11 +149,6 @@ function setTab(name, override) {
     tabs[name].element.classList.add("is-active"); 
     currentTab = name;
     renderTab(currentTab);
-    if (name == "map") {
-        tabContentElement.classList.remove("container");
-    } else if (!tabContentElement.classList.contains("container")) {
-        tabContentElement.classList.add("container");
-    }
 }
 
 function renderTab(tab) {
