@@ -79,7 +79,7 @@ class FetchManager {
             templateName,
             this.templates,
             this.templatePromises,
-            "/static/",
+            "/static/templates/",
             "mustache");
     }
 }

@@ -16,10 +16,10 @@ expressApp.use(function(request, response, next) {
 })
 
 expressApp.get("/", function(request, response, next) {
-    response.redirect("/static/game.html");
+    response.redirect("/static/html/game.html");
 });
 
-expressApp.get("/static/mustache.js", function(request, response, next) {
+expressApp.get("/static/src/mustache.js", function(request, response, next) {
     response.sendFile(path.join(__dirname, "node_modules", "mustache", "mustache.js"), error => {
         if (error) {
             console.error("Error while retrieving mustache.js:");

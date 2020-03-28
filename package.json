@@ -4,7 +4,7 @@
   "description": "Text based adventure inspired by Fallen London and Sunless Sea",
   "main": "main.js",
   "scripts": {
-    "css-build": "node-sass --omit-source-map-url sass/bulma.scss static/bulma.css",
+    "css-build": "node-sass --omit-source-map-url sass/bulma.scss static/html/bulma.css",
     "start": "npm run css-build && node main.js"
   },
   "author": "Phlosioneer",

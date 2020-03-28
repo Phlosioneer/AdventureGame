@@ -192,7 +192,7 @@ class Map {
         this.nearestHub = undefined;
         
         this.mapImage = new Image();
-        this.mapImage.src = "/static/Map.png";
+        this.mapImage.src = "/static/images/Map.png";
         this.mapImage.onload = () => {
             this.manager.renderFunction = () => this.renderCanvas();
         };
