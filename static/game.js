@@ -49,8 +49,9 @@ class Story {
         }
         var quality = await fetchManager.getQuality(requirement.property);
         return {
-            name: quality.name,
-            icon: quality.icon
+            name: quality.displayName,
+            icon: quality.icon,
+            description: this.renderText("You have at least 5 of this.")
         };
     }
 

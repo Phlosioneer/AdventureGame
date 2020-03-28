@@ -1,3 +1,19 @@
 <div class="column fit">
-    <img src="{{icon}}" class="quality-image" alt="{{name}}">
+    <div class="dropdown is-hoverable is-right">
+        <div class="dropdown-trigger">
+            <img src="{{icon}}" class="quality-image" alt="{{name}}">
+        </div>
+        <div class="dropdown-menu">
+            <div class="dropdown-item">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-header-title">{{name}}</div>
+                    </div>
+                    <div class="card-content">
+                        <p>{{description}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
