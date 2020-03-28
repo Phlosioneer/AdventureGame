@@ -23,5 +23,11 @@
                 "children": [{"event": "brimhaven.tavern"}]
             }
         ]
+    },
+    {
+        "name": "test",
+        "title": "test",
+        "description": "test",
+        "options": []
     }
 ]

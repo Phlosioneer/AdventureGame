@@ -4,13 +4,15 @@ var loadingText = "<p>Loading...</p>";
 class Story {
     async render() {
         tabContentElement.innerHTML = loadingText;
+        var eventName = this.eventName;
         var template = await fetchManager.getTemplate("deck");
-        var event =  await fetchManager.getEvent(this.eventName);
+        var event =  await fetchManager.getEvent(eventName);
         var partials = {
             requirement: await fetchManager.getTemplate("requirement")
         };
 
-        var options = await Promise.all(event.options.map(this.renderOption.bind(this)));
+        var options = await Promise.all(event.options.map((option, index) => 
+            this.renderOption(option, index, eventName)));
         var renderData = {
             title: event.title,
             description: this.renderText(event.description),
@@ -18,12 +20,12 @@ class Story {
         };
 
         // Ensure that this is still the current tab before overwriting.
-        if (currentTab == "story") {
+        if (currentTab == "story" && this.eventName === eventName) {
             tabContentElement.innerHTML = Mustache.render(template, renderData, partials);
         }
     }
 
-    async renderOption(option) {
+    async renderOption(option, index, eventName) {
         if (!option.requirements) {
             option.requirements = [];
         }
@@ -39,7 +41,8 @@ class Story {
             description: this.renderText(option.description),
             hasRequirements: option.requirements.length != 0,
             requirements: requirements,
-            buttonText: buttonText
+            buttonText: buttonText,
+            onClick: "tabs.story.instance.chooseOption('" + eventName + "', " + index + ");"
         };
     }
 
@@ -78,6 +81,25 @@ class Story {
     setEvent(eventName) {
         this.eventName = eventName;
         fetchManager.getEvent(eventName);
+        if (currentTab == "story") {
+            this.render();
+        }
+    }
+
+    async chooseOption(eventName, optionIndex) {
+        var oldEvent = this.eventName;
+        var event = await fetchManager.getEvent(eventName);
+        if (this.eventName !== oldEvent) {
+            // Something has changed the event before this could resolve.
+            // Abort the change.
+            return;
+        }
+        var option = event.options[optionIndex];
+        if (option.children.length == 1) {
+            this.setEvent(option.children[0].event);
+        } else {
+            console.error("TODO: Write random-choice code.");
+        }
     }
 }
 

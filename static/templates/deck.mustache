@@ -35,7 +35,7 @@ See requirement.mustache for the definition of the Quality type.
                         {{>requirement}}
                     {{/requirements}}
                     <div class="column last">
-                        <button class="button">{{buttonText}}</button>
+                        <button class="button" onclick="{{onClick}}">{{buttonText}}</button>
                     </div>
                 </div>
             {{/hasRequirements}}
@@ -45,7 +45,7 @@ See requirement.mustache for the definition of the Quality type.
                         {{description}}
                     </div>
                     <div class="column last">
-                        <button class="button">{{buttonText}}</button>
+                        <button class="button" onclick="{{onClick}}">{{buttonText}}</button>
                     </div>
                 </div>
             {{/hasRequirements}}
