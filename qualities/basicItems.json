@@ -2,7 +2,7 @@
     {
         "name": "basic.money",
         "displayName": "Ducats",
-        "icon": "/static/images/icons/coins.png",
+        "icon": "/static/images/icons/coin.png",
         "description": "The currency of most places"
     },
     {
@@ -14,7 +14,7 @@
     {
         "name": "basic.attack",
         "displayName": "Attack",
-        "icon": "/static/images/icons/attack.png",
+        "icon": "/static/images/icons/sword3.png",
         "description": "Your ability to deal damage"
     },
     {
