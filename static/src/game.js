@@ -10,13 +10,13 @@ class Story {
             requirement: await fetchManager.getTemplate("requirement")
         };
 
-        // The rendering data is similar, but not identical, to the event data.
         var options = await Promise.all(event.options.map(this.renderOption.bind(this)));
         var renderData = {
             title: event.title,
             description: this.renderText(event.description),
             options: options
         };
+
         // Ensure that this is still the current tab before overwriting.
         if (currentTab == "story") {
             tabContentElement.innerHTML = Mustache.render(template, renderData, partials);
@@ -69,7 +69,7 @@ class Story {
 
     constructor(cookie) {
         // TODO: Load data from cookies
-        this.eventName = "brimhaven.hub";
+        this.eventName = "haven.hub";
         fetchManager.getEvent(this.eventName);
         fetchManager.getTemplate("deck");
         fetchManager.getTemplate("requirement");

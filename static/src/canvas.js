@@ -175,7 +175,7 @@ class Map {
     constructor(cookie) {
         // TODO: Load data from cookies
         this.canvas = document.getElementById("mapCanvas");
-        this.camera = new Camera({x: 225, y: 464}, this.canvas);
+        this.camera = new Camera({x: 585, y: 1105}, this.canvas);
         
         this.manager = new CanvasManager(this.canvas, undefined, 30);
         this.manager.mouseDraggedListeners.addListener(this.mouseDragged.bind(this));

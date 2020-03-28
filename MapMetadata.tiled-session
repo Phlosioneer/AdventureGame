@@ -4,11 +4,11 @@
     ],
     "fileStates": {
         "assets/MapMetadata.tmx": {
-            "scale": 1.5,
+            "scale": 0.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 232.99999999999997,
-                "y": 471.66666666666663
+                "x": 2204,
+                "y": 1056
             }
         }
     },
